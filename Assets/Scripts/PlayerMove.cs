@@ -9,7 +9,7 @@ public class PlayerMove : MonoBehaviour
     private void Start()
     {
         playMove = new GameObject("MoveBase").AddComponent<MoveBase>();
-        playMove.SetMoveBase(GameObject.FindWithTag("Player"), MoveMode.Player, 6.0f, 8.0f, 20.0f);
+        playMove.SetMoveBase(GameObject.FindWithTag("Player"), MoveMode.Player, ControlMode.Player, 6.0f, 8.0f, 20.0f);
         GameObject.Find("ProjectControl").transform.GetComponent<ProjectControl>().EventCtrl.GetEvent().PlayerCtl += playMove.UseMove;
 }
 

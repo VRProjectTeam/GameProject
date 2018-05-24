@@ -7,7 +7,7 @@ public class EventControl : MonoBehaviour
      private DelegateControl DC;
     private void Awake()
     {
-        DC = new GameObject("EventControl").AddComponent<DelegateControl>();
+        DC = new GameObject("DelegateControl").AddComponent<DelegateControl>();
     }
     public DelegateControl GetEvent()
     {

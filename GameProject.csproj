@@ -223,6 +223,7 @@
     <Compile Include="Assets\Scripts\DelegateControl.cs" />
     <Compile Include="Assets\Scripts\EventControl.cs" />
     <Compile Include="Assets\Scripts\MoveBase.cs" />
+    <Compile Include="Assets\Scripts\NonConvexMeshCollider.cs" />
     <Compile Include="Assets\Scripts\PlayerMove.cs" />
     <Compile Include="Assets\Scripts\ProjectControl.cs" />
     <Compile Include="Assets\Scripts\ResourceControl.cs" />

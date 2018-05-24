@@ -16,6 +16,12 @@ public enum PowerMode
     Impulse,
     VelocityChange
 }
+public enum ControlMode
+{
+    NULL,
+    Player,
+    Enemy
+}
 public class MoveBase : MonoBehaviour
 {
     [SerializeField]
@@ -37,6 +43,7 @@ public class MoveBase : MonoBehaviour
 
     public MoveMode moveMode = MoveMode.NULL;
     public PowerMode powerMode = PowerMode.NULL;
+    public ControlMode controlMode = ControlMode.NULL;
 
     public float MoveSpeed
     {
@@ -69,7 +76,7 @@ public class MoveBase : MonoBehaviour
         set { power = value; }
     }
 
-    public void SetMoveBase(GameObject instance, MoveMode moveMode, float moveSpeed, float jumpSpeed, float gravity)
+    public void SetMoveBase(GameObject instance, MoveMode moveMode, ControlMode controlMode, float moveSpeed, float jumpSpeed, float gravity)
     {
         this.moveMode = moveMode;
         this.moveSpeed = moveSpeed;
@@ -77,19 +84,25 @@ public class MoveBase : MonoBehaviour
         this.gravity = gravity;
         this.instance = instance;
 
+        this.controlMode = controlMode;
+
         IsMoveMode(moveMode);
     }
-    public void SetMoveBase(GameObject instance, MoveMode moveMode, Vector3 powerDirection, float power)
+    public void SetMoveBase(GameObject instance, MoveMode moveMode, ControlMode controlMode, Vector3 powerDirection, float power)
     {
         this.instance = instance;
         this.powerDirection = powerDirection;
         this.power = power;
 
+        this.controlMode = controlMode;
+
         IsMoveMode(moveMode);
     }
-    public void SetMoveBase(GameObject instance, MoveMode moveMode)
+    public void SetMoveBase(GameObject instance, MoveMode moveMode, ControlMode controlMode)
     {
         this.instance = instance;
+
+        this.controlMode = controlMode;
 
         IsMoveMode(moveMode);
     }
@@ -132,11 +145,11 @@ public class MoveBase : MonoBehaviour
             }
         }
     }
-    public void UsePower(PowerMode powerMode)
+    public void UsePower(PowerMode powerMode = PowerMode.NULL)
     {
-        UsePower(powerMode, powerDirection, power);
+        UsePower(powerDirection, power, powerMode);
     }
-    public void UsePower(PowerMode powerMode, Vector3 powerDirection, float power)
+    public void UsePower( Vector3 powerDirection, float powerPowerMode, PowerMode powerMode = PowerMode.NULL)
     {
         if (powerMode == PowerMode.NULL)
         {
@@ -177,28 +190,82 @@ public class MoveBase : MonoBehaviour
     }
     public void UseMove()
     {
-        UseMove(moveSpeed, jumpSpeed, gravity);
+        UseMove(controlMode);
     }
-    public void UseMove(float moveSpeed, float jumpSpeed, float gravity)
+    public void UseMove(ControlMode controlMode, bool isJump = false)
     {
-        if (moveMode == MoveMode.StaticObject)
+        if (controlMode == ControlMode.NULL)
         {
-            Debug.Log("不能使用控制器控制非控制器对象");
+            Debug.Log("未选择控制器控制模式");
         }
         else
         {
-            if (instance.transform.GetComponent<CharacterController>().isGrounded)
+            if (controlMode == ControlMode.Player)
             {
-                moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-                moveDirection = instance.transform.TransformDirection(moveDirection);
-                moveDirection *= moveSpeed;
-                if (Input.GetButton("Jump"))
-                {
-                    moveDirection.y = jumpSpeed;
-                }
+                UseMove(controlMode, moveSpeed, jumpSpeed, gravity);
             }
-            moveDirection.y -= gravity * Time.deltaTime;
-            instance.transform.GetComponent<CharacterController>().Move(moveDirection * Time.deltaTime);
+            if (controlMode == ControlMode.Enemy)
+            {
+                UseMove(controlMode, moveDirection, moveSpeed, jumpSpeed, isJump, gravity);
+            }
+        }
+    }
+    public void UseMove(ControlMode controlMode, float moveSpeed, float jumpSpeed, float gravity)
+    {
+        if (controlMode == ControlMode.Player)
+        {
+            if (moveMode == MoveMode.StaticObject)
+            {
+                Debug.Log("不能使用控制器控制非控制器对象");
+            }
+            else
+            {
+                if (instance.transform.GetComponent<CharacterController>().isGrounded)
+                {
+                    moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+                    moveDirection = instance.transform.TransformDirection(moveDirection);
+                    moveDirection *= moveSpeed;
+                    if (Input.GetButton("Jump"))
+                    {
+                        moveDirection.y = jumpSpeed;
+                    }
+                }
+                moveDirection.y -= gravity * Time.deltaTime;
+                instance.transform.GetComponent<CharacterController>().Move(moveDirection * Time.deltaTime);
+            }
+        }
+        else
+        {
+            Debug.Log("移动模式和参数不符合");
+        }
+    }
+    public void UseMove(ControlMode controlMode, Vector3 moveDirection, float moveSpeed, float jumpSpeed, bool isJump,float gravity)
+    {
+        if (controlMode == ControlMode.Enemy)
+        {
+            if (moveMode == MoveMode.StaticObject)
+            {
+                Debug.Log("不能使用控制器控制非控制器对象");
+            }
+            else
+            {
+                if (instance.transform.GetComponent<CharacterController>().isGrounded)
+                {
+                    moveDirection = instance.transform.TransformDirection(moveDirection);
+                    moveDirection *= moveSpeed;
+                    if (isJump)
+                    {
+                        moveDirection.y = jumpSpeed;
+                        isJump = false;
+                    }
+                }
+                moveDirection.y -= gravity * Time.deltaTime;
+                instance.transform.GetComponent<CharacterController>().Move(moveDirection * Time.deltaTime);
+            }
+        }
+        else
+        {
+            Debug.Log("移动模式和参数不符合");
         }
     }
 }
