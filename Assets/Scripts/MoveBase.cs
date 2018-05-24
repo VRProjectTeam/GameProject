@@ -16,11 +16,11 @@ public enum PowerMode
     Impulse,
     VelocityChange
 }
-public enum ControlMode
+public enum MoveControlMode
 {
     NULL,
     Player,
-    Enemy
+    Other
 }
 public class MoveBase : MonoBehaviour
 {
@@ -43,7 +43,7 @@ public class MoveBase : MonoBehaviour
 
     public MoveMode moveMode = MoveMode.NULL;
     public PowerMode powerMode = PowerMode.NULL;
-    public ControlMode controlMode = ControlMode.NULL;
+    public MoveControlMode controlMode = MoveControlMode.NULL;
 
     public float MoveSpeed
     {
@@ -76,7 +76,7 @@ public class MoveBase : MonoBehaviour
         set { power = value; }
     }
 
-    public void SetMoveBase(GameObject instance, MoveMode moveMode, ControlMode controlMode, float moveSpeed, float jumpSpeed, float gravity)
+    public void SetMoveBase(GameObject instance, MoveMode moveMode, MoveControlMode controlMode, float moveSpeed, float jumpSpeed, float gravity)
     {
         this.moveMode = moveMode;
         this.moveSpeed = moveSpeed;
@@ -88,7 +88,7 @@ public class MoveBase : MonoBehaviour
 
         IsMoveMode(moveMode);
     }
-    public void SetMoveBase(GameObject instance, MoveMode moveMode, ControlMode controlMode, Vector3 powerDirection, float power)
+    public void SetMoveBase(GameObject instance, MoveMode moveMode, MoveControlMode controlMode, Vector3 powerDirection, float power)
     {
         this.instance = instance;
         this.powerDirection = powerDirection;
@@ -98,7 +98,7 @@ public class MoveBase : MonoBehaviour
 
         IsMoveMode(moveMode);
     }
-    public void SetMoveBase(GameObject instance, MoveMode moveMode, ControlMode controlMode)
+    public void SetMoveBase(GameObject instance, MoveMode moveMode, MoveControlMode controlMode)
     {
         this.instance = instance;
 
@@ -192,27 +192,27 @@ public class MoveBase : MonoBehaviour
     {
         UseMove(controlMode);
     }
-    public void UseMove(ControlMode controlMode, bool isJump = false)
+    public void UseMove(MoveControlMode controlMode, bool isJump = false)
     {
-        if (controlMode == ControlMode.NULL)
+        if (controlMode == MoveControlMode.NULL)
         {
             Debug.Log("未选择控制器控制模式");
         }
         else
         {
-            if (controlMode == ControlMode.Player)
+            if (controlMode == MoveControlMode.Player)
             {
                 UseMove(controlMode, moveSpeed, jumpSpeed, gravity);
             }
-            if (controlMode == ControlMode.Enemy)
+            if (controlMode == MoveControlMode.Other)
             {
                 UseMove(controlMode, moveDirection, moveSpeed, jumpSpeed, isJump, gravity);
             }
         }
     }
-    public void UseMove(ControlMode controlMode, float moveSpeed, float jumpSpeed, float gravity)
+    public void UseMove(MoveControlMode controlMode, float moveSpeed, float jumpSpeed, float gravity)
     {
-        if (controlMode == ControlMode.Player)
+        if (controlMode == MoveControlMode.Player)
         {
             if (moveMode == MoveMode.StaticObject)
             {
@@ -239,9 +239,9 @@ public class MoveBase : MonoBehaviour
             Debug.Log("移动模式和参数不符合");
         }
     }
-    public void UseMove(ControlMode controlMode, Vector3 moveDirection, float moveSpeed, float jumpSpeed, bool isJump,float gravity)
+    public void UseMove(MoveControlMode controlMode, Vector3 moveDirection, float moveSpeed, float jumpSpeed, bool isJump,float gravity)
     {
-        if (controlMode == ControlMode.Enemy)
+        if (controlMode == MoveControlMode.Other)
         {
             if (moveMode == MoveMode.StaticObject)
             {
