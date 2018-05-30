@@ -220,14 +220,18 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Scripts\DelegateControl.cs" />
-    <Compile Include="Assets\Scripts\EventControl.cs" />
-    <Compile Include="Assets\Scripts\MoveBase.cs" />
+    <Compile Include="Assets\Scripts\Controller\PlayerController.cs" />
+    <Compile Include="Assets\Scripts\Function\Move.cs" />
+    <Compile Include="Assets\Scripts\Function\PlayerRotate.cs" />
+    <Compile Include="Assets\Scripts\Manager\MainManager.cs" />
+    <Compile Include="Assets\Scripts\Manager\PlayerManager.cs" />
     <Compile Include="Assets\Scripts\NonConvexMeshCollider.cs" />
-    <Compile Include="Assets\Scripts\PlayerMove.cs" />
-    <Compile Include="Assets\Scripts\ProjectControl.cs" />
-    <Compile Include="Assets\Scripts\ResourceControl.cs" />
-    <Compile Include="Assets\Scripts\RotateBase.cs" />
+    <Compile Include="Assets\Scripts\Property\CharacterProperty.cs" />
+    <Compile Include="Assets\Scripts\Property\MainSceneProperty.cs" />
+    <Compile Include="Assets\Scripts\Property\PlayerProperty.cs" />
+    <Compile Include="Assets\Scripts\Property\SceneProperty.cs" />
+    <Compile Include="Assets\Scripts\Storage\UseXmlStorage.cs" />
+    <Compile Include="Assets\Scripts\Storage\XmlStorage.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />
